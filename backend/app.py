@@ -8,7 +8,7 @@ import spotipy
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 sp_oauth = SpotifyOAuth(
     client_id=os.getenv('SPOTIFY_CLIENT_ID'),
@@ -26,7 +26,7 @@ def login():
 def callback():
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
-    return redirect(f'http://localhost:3000?access_token={token_info["access_token"]}')
+    return redirect(f'http://127.0.0.1:3000?access_token={token_info["access_token"]}')
 
 @app.route('/playlist/<playlist_id>')
 def get_playlist(playlist_id):
@@ -127,4 +127,4 @@ def calculate_confidence(track_features, target_features):
     return round(score * 100, 1)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8888)
+    app.run(debug=True, port=8000)
